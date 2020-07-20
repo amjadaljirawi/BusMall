@@ -65,10 +65,17 @@ function generateRandomImage(){
     imgTowIndex = generateRandomNumber();
     imgthreeIndex = generateRandomNumber();
 
-    while (imgOneIndex === imgTowIndex === imgthreeIndex){
+    while (imgOneIndex === imgTowIndex){
         imgTowIndex = generateRandomNumber(); 
-        imgOneIndex = generateRandomNumber();
+    }
+
+    while (imgOneIndex === imgthreeIndex){
         imgthreeIndex = generateRandomNumber();
+    
+    }
+    while (imgthreeIndex === imgTowIndex){
+        imgTowIndex = generateRandomNumber();
+        ;
     }
 
     
@@ -107,7 +114,7 @@ function imageClick(){
                 allImages[imgthreeIndex].numberOfClicks +=1;
             }
             generateRandomImage();
-            console.log(allImages);
+            console.log("to see working");
         }
     } else {
         populateNumberOfClicksArr();
