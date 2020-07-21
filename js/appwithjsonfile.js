@@ -121,7 +121,7 @@ function imageClick(){
         populateNumberOfClicksArr();
         generateUserMessage();
         generateChart();
-        storeOurGoats();
+        storeOurimgOrder();
         imageVew.removeEventListener('click', imageClick);
     }
 }
@@ -143,7 +143,7 @@ function populateNumberOfClicksArr(){
     }
 }
 
-function storeOurGoats(){
+function storeOurimgOrder(){
     // in order to save our array of objects into the localstorage we will need to formate our json object in json string
     var jsonstringorder = JSON.stringify(allImages);
     // creare a new property in our localstorage 

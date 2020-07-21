@@ -14,6 +14,8 @@ var imgTowIndex;
 var imgthreeIndex;
 var dataNumberOfClicks =[];
 var numberOfClicks = [];
+var numberOfviews =[];
+var numberOfTimesShown= [];
 
 
 
@@ -118,8 +120,11 @@ function imageClick(){
         }
     } else {
         populateNumberOfClicksArr();
+        populateNumberOfviewsArr();
         generateUserMessage();
         generateChart();
+        generateCharttwo();
+        storeOurimgOrder()
         imageVew.removeEventListener('click', imageClick);
     }
 }
@@ -135,15 +140,49 @@ function generateUserMessage(){
 
 
 }
+function populateNumberOfviewsArr(){
+  for (let index = 0; index < allImages.length; index++) {
+    numberOfTimesShown.push( allImages[index].numberOfTimesShown);   
+}
+}
 function populateNumberOfClicksArr(){
     for (let index = 0; index < allImages.length; index++) {
         numberOfClicks.push( allImages[index].numberOfClicks);   
     }
 }
+
+function storeOurimgOrder(){
+  // in order to save our array of objects into the localstorage we will need to formate our json object in json string
+  var jsonstringorder = JSON.stringify(allImages);
+  // creare a new property in our localstorage 
+  localStorage.setItem('orders',jsonstringorder);
+}
+console.log('inital');
+console.table(allImages);
+parseLocalStorage();
+console.log('after updating');
+console.table(allImages);
+// this function is responsible for parsing the json string to json object 
+function parseLocalStorage(){
+  var imgorderarray =JSON.parse(localStorage.getItem('orders'))
+  console.log(imgorderarray);
+  // this funtcion will update the newly created objects with the old literation values
+  update(imgorderarray);
+
+}
+
+function update(imgorderarray){
+  for (let index = 0; index < allImages.length; index++) {
+    allImages[index].numberOfClicks = imgorderarray[index].numberOfClicks;
+    allImages[index].numberOfTimesShown = imgorderarray[index].numberOfTimesShown;
+    
+  }
+}
+
 function generateChart(){
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
-      type: 'bar',
+      type: 'radar',
       data: {
         labels: lableNames,
         datasets: [{
@@ -179,3 +218,46 @@ function generateChart(){
       }
     });
 }
+
+function generateCharttwo(){
+  var ctx = document.getElementById('myCharttwo').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: lableNames,
+      datasets: [{
+        label: '# of View',
+        data: numberOfTimesShown,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+document.getElementById('clearStroage').addEventListener('click', function(){
+  localStorage.clear();
+});
